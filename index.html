@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfigurasi Tombol WA</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e5ddd5; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { color: #075e54; text-align: center; margin-top: 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        .btn-list { background: #f9f9f9; padding: 10px; border-radius: 6px; border: 1px dashed #ccc; margin-bottom: 15px; }
+        .btn-input { margin-bottom: 8px; }
+        .send-btn { width: 100%; padding: 15px; background-color: #25D366; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .send-btn:hover { background-color: #128C7E; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Setelan Pesan Tombol</h2>
+    
+    <div class="form-group">
+        <label>Nomor Tujuan (Penerima):</label>
+        <input type="number" id="penerima" placeholder="Contoh: 628123456789">
+    </div>
+
+    <div class="form-group">
+        <label>Pesan Utama (Header/Body):</label>
+        <textarea id="pesanUtama" rows="3" placeholder="Contoh: Silahkan pilih layanan kami:"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Daftar Tombol (Isi nama tombol):</label>
+        <div class="btn-list">
+            <input type="text" class="btn-input" id="btn1" placeholder="Nama Tombol 1 (Contoh: Layanan A)">
+            <input type="text" class="btn-input" id="btn2" placeholder="Nama Tombol 2 (Contoh: Layanan B)">
+            <input type="text" class="btn-input" id="btn3" placeholder="Nama Tombol 3 (Contoh: Hubungi Admin)">
+        </div>
+    </div>
+
+    <button class="send-btn" onclick="kirimKonfigurasi()">Kirim Konfigurasi ke WA</button>
+</div>
+
+<script>
+    function kirimKonfigurasi() {
+        const nomor = document.getElementById('penerima').value;
+        const header = document.getElementById('pesanUtama').value;
+        
+        // Mengambil nilai dari tiap tombol
+        const b1 = document.getElementById('btn1').value;
+        const b2 = document.getElementById('btn2').value;
+        const b3 = document.getElementById('btn3').value;
+
+        if (!nomor || !header) {
+            alert("Mohon isi nomor tujuan dan pesan utama!");
+            return;
+        }
+
+        // Menyusun format teks agar mudah dibaca oleh Admin/System Bot
+        let teksFinal = `*REQUEST TOMBOL BARU*%0A%0A`;
+        teksFinal += `*Pesan:* ${header}%0A`;
+        teksFinal += `--------------------------%0A`;
+        if(b1) teksFinal += `🔘 Tombol 1: ${b1}%0A`;
+        if(b2) teksFinal += `🔘 Tombol 2: ${b2}%0A`;
+        if(b3) teksFinal += `🔘 Tombol 3: ${b3}%0A`;
+
+        const url = `https://api.whatsapp.com/send?phone=${nomor}&text=${teksFinal}`;
+        window.open(url, '_blank');
+    }
+</script>
+
+</body>
+</html>
